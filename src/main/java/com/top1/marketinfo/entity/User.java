@@ -13,6 +13,46 @@ import javax.persistence.Id;
 @Entity
 public class User {
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getWxNumber() {
+        return wxNumber;
+    }
+
+    public void setWxNumber(String wxNumber) {
+        this.wxNumber = wxNumber;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,10 +63,5 @@ public class User {
 
     private String nickname;
 
-    /**
-     * 0:超级管理员
-     * 1：管理员
-     * 2：普通用户
-     */
-    private int role=2;
+    private Role role=Role.GENERAL;
 }

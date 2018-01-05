@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Company {
+public class Enterprise {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
