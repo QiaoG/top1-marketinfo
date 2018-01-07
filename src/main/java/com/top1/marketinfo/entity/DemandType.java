@@ -4,14 +4,14 @@ import com.fasterxml.jackson.annotation.JsonValue;
 
 /*
 * Author GQ
-* Date:2018/1/5
-* Time:下午8:14
+* Date:2018/1/6
+* Time:下午8:06
 */
-public enum EnterpriseCategory{
-
-    LISTED_COMPANIES(0, "挂牌企业"), INVESTMENT_INSTITUTION(1, "投资机构"), FINANCIAL_ADVISOR(2, "财务顾问"), SECURITIES_COMPANY(3, "证劵公司"), ANALYST(4, "分析师"), OTHER(5, "其他机构");
+public enum DemandType {
+    STOCK_TRANSFER(0, "老股转让"), INVITE_SURVEY(1, "约调研"), INVITE_INVESTMENT(2, "约投资"), STOCK_MORTGAGE(3, "股权抵押"), OTHER(4, "其他");
 
     private int id;
+    private String name;
 
     public int getId() {
         return id;
@@ -30,11 +30,9 @@ public enum EnterpriseCategory{
         this.name = name;
     }
 
-    private String name;
-
-    EnterpriseCategory(int id, String name) {
+    DemandType(int id, String name) {
         this.id = id;
         this.name = name;
+
     }
 }
-

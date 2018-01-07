@@ -5,13 +5,23 @@ package com.top1.marketinfo.entity;
 * Time:下午2:45
 */
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
+
+//    public User() {
+//        super();
+//    }
+//
+//    public User(Long id,String wxNumber, String mobile, String nickname, Role role) {
+//        super();
+//        this.id = id;
+//        this.wxNumber = wxNumber;
+//        this.mobile = mobile;
+//        this.nickname = nickname;
+//        this.role = role;
+//    }
 
     public Long getId() {
         return id;
@@ -45,13 +55,6 @@ public class User {
         this.nickname = nickname;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -63,5 +66,24 @@ public class User {
 
     private String nickname;
 
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
     private Role role=Role.GENERAL;
+
+    public Enterprise getEnterprise() {
+        return enterprise;
+    }
+
+    public void setEnterprise(Enterprise enterprise) {
+        this.enterprise = enterprise;
+    }
+
+    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    private Enterprise enterprise;
 }
