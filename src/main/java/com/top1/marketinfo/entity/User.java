@@ -10,18 +10,19 @@ import javax.persistence.*;
 @Entity
 public class User {
 
-//    public User() {
-//        super();
-//    }
-//
-//    public User(Long id,String wxNumber, String mobile, String nickname, Role role) {
-//        super();
-//        this.id = id;
-//        this.wxNumber = wxNumber;
-//        this.mobile = mobile;
-//        this.nickname = nickname;
-//        this.role = role;
-//    }
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    private String wxNumber;
+
+    private String mobile;
+
+    private String nickname;
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private Enterprise enterprise;
+
 
     public Long getId() {
         return id;
@@ -55,17 +56,6 @@ public class User {
         this.nickname = nickname;
     }
 
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-
-    private String wxNumber;
-
-    private String mobile;
-
-    private String nickname;
-
     public Role getRole() {
         return role;
     }
@@ -74,7 +64,7 @@ public class User {
         this.role = role;
     }
 
-    private Role role=Role.GENERAL;
+    private Role role = Role.GENERAL;
 
     public Enterprise getEnterprise() {
         return enterprise;
@@ -84,6 +74,4 @@ public class User {
         this.enterprise = enterprise;
     }
 
-    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
-    private Enterprise enterprise;
 }

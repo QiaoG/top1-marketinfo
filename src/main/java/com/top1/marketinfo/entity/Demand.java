@@ -1,14 +1,12 @@
 package com.top1.marketinfo.entity;
 /*
+* 需求
 * Author GQ
 * Date:2018/1/5
 * Time:下午2:51
 */
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -18,7 +16,26 @@ public class Demand {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private String publisher = "";
+    private DemandType type = DemandType.OTHER;
+
+    private String content = "";
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date publishDate = new Date();
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date invalidDate = new Date();
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private User publisher;
+
+    public User getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(User publisher) {
+        this.publisher = publisher;
+    }
 
     public Long getId() {
         return id;
@@ -26,14 +43,6 @@ public class Demand {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getPublisher() {
-        return publisher;
-    }
-
-    public void setPublisher(String publisher) {
-        this.publisher = publisher;
     }
 
     public DemandType getType() {
@@ -68,11 +77,5 @@ public class Demand {
         this.invalidDate = invalidDate;
     }
 
-    private DemandType type = DemandType.OTHER;
 
-    private String content = "";
-
-    private Date publishDate = new Date();
-
-    private Date invalidDate = new Date();
 }

@@ -1,36 +1,31 @@
 package com.top1.marketinfo.entity;
-/*
-* Author GQ
-* Date:2018/1/5
-* Time:下午2:51
-*/
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
+/*
+* 评论
+* Author GQ
+* Date:2018/1/7
+* Time:下午4:51
+*/
 @Entity
-public class News {
+public class Discuss {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
-    private String content = "";
+    private String content;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private User author;
 
-    private String source;
-
-    private String title = "";
-
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private User publisher;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date date = new Date();
 
     public Long getId() {
         return id;
@@ -48,22 +43,6 @@ public class News {
         this.content = content;
     }
 
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -71,7 +50,6 @@ public class News {
     public void setDate(Date date) {
         this.date = date;
     }
-
 
     public User getAuthor() {
         return author;
@@ -88,5 +66,4 @@ public class News {
     public void setPublisher(User publisher) {
         this.publisher = publisher;
     }
-
 }

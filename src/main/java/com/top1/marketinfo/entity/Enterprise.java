@@ -17,6 +17,12 @@ public class Enterprise {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    private String name;
+
+    private EnterpriseCategory category;
+
+    private String securitiesCode;
+
     public Long getId() {
         return id;
     }
@@ -48,11 +54,5 @@ public class Enterprise {
     public void setSecuritiesCode(String securitiesCode) {
         this.securitiesCode = securitiesCode;
     }
-
-    private String name;
-
-    private EnterpriseCategory category;
-
-    private String securitiesCode;
 
 }
