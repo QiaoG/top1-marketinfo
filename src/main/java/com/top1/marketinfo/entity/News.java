@@ -6,7 +6,6 @@ package com.top1.marketinfo.entity;
 */
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -22,7 +21,7 @@ public class News {
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
     private User author;
 
-    private String source;
+    private String newsSource;
 
     private String title = "";
 
@@ -30,7 +29,18 @@ public class News {
     private User publisher;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date = new Date();
+    private Date createDate = new Date();
+
+    @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify，1:has verify'")
+    private int status = 0;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -48,12 +58,12 @@ public class News {
         this.content = content;
     }
 
-    public String getSource() {
-        return source;
+    public String getNewsSource() {
+        return newsSource;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    public void setNewsSource(String newsSource) {
+        this.newsSource = newsSource;
     }
 
     public String getTitle() {
@@ -64,14 +74,13 @@ public class News {
         this.title = title;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getCreateDate() {
+        return createDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
-
 
     public User getAuthor() {
         return author;

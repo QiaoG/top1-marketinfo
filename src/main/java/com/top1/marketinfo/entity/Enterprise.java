@@ -5,6 +5,7 @@ package com.top1.marketinfo.entity;
 * Time:下午2:50
 */
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

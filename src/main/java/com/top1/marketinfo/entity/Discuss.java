@@ -10,22 +10,40 @@ import java.util.Date;
 * Time:下午4:51
 */
 @Entity
+@Table(indexes = {@Index(name = "",columnList = "discussSource")})
 public class Discuss {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @Column(columnDefinition = "bigint(20) COMMENT 'new_id/demand_id'")
+    private int discussSource;
+
+    @Column(columnDefinition = "tinyint COMMENT '0:news，1:demand'")
+    private int sourceType;
+
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Date createDate;
 
-    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private User author;
 
-    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private User publisher;
+
+    @Column(columnDefinition = "tinyint default 0 COMMENT '0:未审核，1:已审核'")
+    private int status = 0;
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
     public Long getId() {
         return id;
@@ -43,16 +61,33 @@ public class Discuss {
         this.content = content;
     }
 
-    public Date getDate() {
-        return date;
+    public int getDiscussSource() {
+        return discussSource;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDiscussSource(int discussSource) {
+        this.discussSource = discussSource;
+    }
+
+    public Date getCreateDate() {
+        return createDate;
+    }
+
+    public void setCreateDate(Date createDate) {
+        this.createDate = createDate;
     }
 
     public User getAuthor() {
         return author;
+    }
+
+
+    public int getSourceType() {
+        return sourceType;
+    }
+
+    public void setSourceType(int sourceType) {
+        this.sourceType = sourceType;
     }
 
     public void setAuthor(User author) {
