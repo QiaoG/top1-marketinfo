@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import java.util.Date;
 
+//@Cacheable
 @Entity
 public class Demand {
 

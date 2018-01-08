@@ -8,4 +8,5 @@ import org.springframework.stereotype.Service;
 * Time:下午4:12
 */
 public interface UserService {
+    public int demo();
 }

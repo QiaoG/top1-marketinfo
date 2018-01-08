@@ -1,6 +1,8 @@
 package com.top1.marketinfo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,8 +13,9 @@ import java.util.Date;
 * Date:2018/1/7
 * Time:下午4:51
 */
+//@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
-@Table(indexes = {@Index(name = "",columnList = "discussSource")})
+@Table(indexes = {@Index(name = "index_source",columnList = "discussSource")})
 public class Discuss {
 
     @Id
