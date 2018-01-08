@@ -6,6 +6,8 @@ package com.top1.marketinfo.entity;
 * Time:下午2:51
 */
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -21,9 +23,11 @@ public class Demand {
     private String content = "";
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date publishDate = new Date();
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date invalidDate = new Date();
 
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

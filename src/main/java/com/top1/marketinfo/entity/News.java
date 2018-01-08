@@ -5,6 +5,8 @@ package com.top1.marketinfo.entity;
 * Time:下午2:51
 */
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -29,6 +31,7 @@ public class News {
     private User publisher;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate = new Date();
 
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify，1:has verify'")
