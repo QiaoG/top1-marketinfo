@@ -34,7 +34,7 @@ public class News {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate = new Date();
 
-    @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify，1:has verify'")
+    @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
     public int getStatus() {

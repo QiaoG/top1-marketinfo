@@ -33,7 +33,7 @@ public class Demand {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private User publisher;
 
-    @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify，1:has verify'")
+    @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
     public int getStatus() {

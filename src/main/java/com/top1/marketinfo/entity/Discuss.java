@@ -22,7 +22,7 @@ public class Discuss {
     @Column(columnDefinition = "bigint(20) COMMENT 'new_id/demand_id'")
     private int discussSource;
 
-    @Column(columnDefinition = "tinyint COMMENT '0:news，1:demand'")
+    @Column(columnDefinition = "tinyint COMMENT '0:news,1:demand'")
     private int sourceType;
 
     private String content;
@@ -37,7 +37,7 @@ public class Discuss {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private User publisher;
 
-    @Column(columnDefinition = "tinyint default 0 COMMENT '0:未审核，1:已审核'")
+    @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
     public int getStatus() {
