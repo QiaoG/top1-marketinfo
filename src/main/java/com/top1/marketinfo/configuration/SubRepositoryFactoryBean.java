@@ -1,6 +1,7 @@
 package com.top1.marketinfo.configuration;
 
-import com.top1.marketinfo.intercept.SaveAndUpdatePostProcessor;
+import com.top1.marketinfo.intercept.VerifyPostProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
@@ -16,6 +17,10 @@ import java.io.Serializable;
 */
 public class SubRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I extends Serializable>
         extends JpaRepositoryFactoryBean<R, T, I> {
+
+    @Autowired
+    private VerifyPostProcessor processor;
+
     /**
      * Creates a new {@link JpaRepositoryFactoryBean} for the given repository interface.
      *
@@ -27,7 +32,7 @@ public class SubRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I extend
 
     protected RepositoryFactorySupport createRepositoryFactory(EntityManager entityManager) {
         JpaRepositoryFactory jpaFac = new JpaRepositoryFactory(entityManager);
-        jpaFac.addRepositoryProxyPostProcessor(new SaveAndUpdatePostProcessor());
+        jpaFac.addRepositoryProxyPostProcessor(processor);
         return jpaFac;
     }
 }
