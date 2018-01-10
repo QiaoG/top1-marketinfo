@@ -83,19 +83,19 @@ public class News {
         this.createDate = createDate;
     }
 
-    public int getPublisherId() {
-        return publisherId;
-    }
-
-    public void setPublisherId(int publisherId) {
-        this.publisherId = publisherId;
-    }
-
     public int getAuthorId() {
         return authorId;
     }
 
     public void setAuthorId(int authorId) {
         this.authorId = authorId;
+    }
+
+    public int getPublisherId() {
+        return publisherId;
+    }
+
+    public void setPublisherId(int publisherId) {
+        this.publisherId = publisherId;
     }
 }
