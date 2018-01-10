@@ -31,8 +31,7 @@ public class Demand {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date invalidDate = new Date();
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private User publisher;
+    private int publisherId;
 
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
@@ -45,12 +44,12 @@ public class Demand {
         this.status = status;
     }
 
-    public User getPublisher() {
-        return publisher;
+    public int getPublisherId() {
+        return publisherId;
     }
 
-    public void setPublisher(User publisher) {
-        this.publisher = publisher;
+    public void setPublisherId(int publisherId) {
+        this.publisherId = publisherId;
     }
 
     public Long getId() {

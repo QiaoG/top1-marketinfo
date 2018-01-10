@@ -27,7 +27,7 @@ dependencies {
 	compile('mysql:mysql-connector-java')
 
 	// https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache
-	//compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.12.Final'
+	//compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.2.11.Final'
 
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')

@@ -34,11 +34,9 @@ public class Discuss {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private User author;
+    private int authorId;
 
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    private User publisher;
+    private int publisherId;
 
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
@@ -83,11 +81,6 @@ public class Discuss {
         this.createDate = createDate;
     }
 
-    public User getAuthor() {
-        return author;
-    }
-
-
     public int getSourceType() {
         return sourceType;
     }
@@ -96,15 +89,19 @@ public class Discuss {
         this.sourceType = sourceType;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public User getPublisher() {
-        return publisher;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
 
-    public void setPublisher(User publisher) {
-        this.publisher = publisher;
+    public int getPublisherId() {
+        return publisherId;
+    }
+
+    public void setPublisherId(int publisherId) {
+        this.publisherId = publisherId;
     }
 }

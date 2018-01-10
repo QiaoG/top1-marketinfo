@@ -1,0 +1,47 @@
+postMan:Content-Type:application/json;charset=UTF-8
+
+curl -i -X POST -H "Content-Type:application/json" -d "{\"discussSource\": 2,\"sourceType\": 1,\"content\": \"我的评论\",\"createDate\": \"2018-01-09 10:00:09\",\"status\": 0,}" http://localhost:8080/discuss
+
+post user:
+{
+	"wxNumber":"wxn_1",
+	"mobile":"13462487653",
+	"nickname":"nick_1",
+	"createDate":"2018-01-09 08:04:43","role":"2",
+	"enterprise":{
+		"name": "enterprice2",
+    	"category": "4",
+    	"securitiesCode": "010102"
+	}
+}
+
+post discuss:
+{
+	"discussSource": 2,
+    "sourceType": 1,
+    "content": "我的评论",
+    "createDate": "2018-01-09 10:00:09",
+    "status": 0,
+    "authorId":3,
+    "publisherId":2
+}
+
+post news:
+{
+    "content": "新闻-1",
+    "newsSource": "测试企业1",
+    "title": "new-1",
+    "createDate": "2017-10-09 02:00:09",
+    "status": 0,
+    "authorId":3,
+    "publisherId":2
+}
+
+post demand:
+{
+    "content":"需求-1",
+    "type":1,
+    "publisher_id":2,
+    "publisher_date":"2018-01-02 10:00:09",
+    "invalid_date":"2018-01-05 10:00:09"
+}

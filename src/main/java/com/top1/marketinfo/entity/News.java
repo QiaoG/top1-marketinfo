@@ -20,15 +20,13 @@ public class News {
     @Column(nullable = false)
     private String content = "";
 
-    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
-    private User author;
+    private int authorId;
 
     private String newsSource;
 
     private String title = "";
 
-    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
-    private User publisher;
+    private int publisherId;
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -85,20 +83,19 @@ public class News {
         this.createDate = createDate;
     }
 
-    public User getAuthor() {
-        return author;
+    public int getPublisherId() {
+        return publisherId;
     }
 
-    public void setAuthor(User author) {
-        this.author = author;
+    public void setPublisherId(int publisherId) {
+        this.publisherId = publisherId;
     }
 
-    public User getPublisher() {
-        return publisher;
+    public int getAuthorId() {
+        return authorId;
     }
 
-    public void setPublisher(User publisher) {
-        this.publisher = publisher;
+    public void setAuthorId(int authorId) {
+        this.authorId = authorId;
     }
-
 }

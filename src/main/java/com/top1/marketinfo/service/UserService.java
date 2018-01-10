@@ -1,5 +1,6 @@
 package com.top1.marketinfo.service;
 
+import com.top1.marketinfo.entity.User;
 import org.springframework.stereotype.Service;
 
 /*
@@ -9,4 +10,6 @@ import org.springframework.stereotype.Service;
 */
 public interface UserService {
     public int demo();
+
+    public int saveUser(User user);
 }

@@ -1,5 +1,7 @@
 package com.top1.marketinfo.service.impl;
 
+import com.top1.marketinfo.entity.User;
+import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.AbstractJdbcService;
 import com.top1.marketinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,9 @@ public class UserServiceImpl extends AbstractJdbcService implements UserService{
     private final String sqlOne = "select count(*) from user";
 
     @Autowired
+    private UserRepository repository;
+
+    @Autowired
     public UserServiceImpl(DataSource dataSource) {
         super(dataSource);
     }
@@ -26,5 +31,10 @@ public class UserServiceImpl extends AbstractJdbcService implements UserService{
     public int demo() {
         int c = this.jdbcTemplate.queryForObject(sqlOne, Integer.class);
         return c;
+    }
+
+    @Override
+    public int saveUser(User user) {
+        return 0;
     }
 }
