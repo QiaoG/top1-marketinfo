@@ -1,6 +1,7 @@
 package com.top1.marketinfo.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -15,6 +16,7 @@ import java.util.Date;
 */
 //@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
 @Entity
+@Data
 @Table(indexes = {@Index(name = "index_source",columnList = "discussSource")})
 public class Discuss {
 
@@ -41,67 +43,4 @@ public class Discuss {
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public int getDiscussSource() {
-        return discussSource;
-    }
-
-    public void setDiscussSource(int discussSource) {
-        this.discussSource = discussSource;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public int getSourceType() {
-        return sourceType;
-    }
-
-    public void setSourceType(int sourceType) {
-        this.sourceType = sourceType;
-    }
-
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
-    public int getPublisherId() {
-        return publisherId;
-    }
-
-    public void setPublisherId(int publisherId) {
-        this.publisherId = publisherId;
-    }
 }

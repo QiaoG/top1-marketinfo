@@ -6,11 +6,14 @@ package com.top1.marketinfo.entity;
 */
 
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+@Data
 @Entity
 public class Enterprise {
 
@@ -24,36 +27,5 @@ public class Enterprise {
 
     private String securitiesCode;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public EnterpriseCategory getCategory() {
-        return category;
-    }
-
-    public void setCategory(EnterpriseCategory category) {
-        this.category = category;
-    }
-
-    public String getSecuritiesCode() {
-        return securitiesCode;
-    }
-
-    public void setSecuritiesCode(String securitiesCode) {
-        this.securitiesCode = securitiesCode;
-    }
 
 }

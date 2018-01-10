@@ -1,6 +1,7 @@
 package com.top1.marketinfo.intercept;
 
 import com.top1.marketinfo.service.NotifyForVerifyServcie;
+import lombok.extern.slf4j.Slf4j;
 import org.aopalliance.intercept.MethodInvocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,9 @@ import org.springframework.stereotype.Component;
 * Date:2018/1/10
 * Time:上午10:38
 */
+@Slf4j
 @Component
 public class VerifyIntercepter {
-    private Logger log = LoggerFactory.getLogger(VerifyIntercepter.class);
 
     @Autowired
     private NotifyForVerifyServcie notifyService;

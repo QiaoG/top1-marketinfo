@@ -7,11 +7,12 @@ package com.top1.marketinfo.entity;
 */
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
-//@Cacheable
+@Data
 @Entity
 public class Demand {
 
@@ -36,60 +37,5 @@ public class Demand {
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public int getPublisherId() {
-        return publisherId;
-    }
-
-    public void setPublisherId(int publisherId) {
-        this.publisherId = publisherId;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public DemandType getType() {
-        return type;
-    }
-
-    public void setType(DemandType type) {
-        this.type = type;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public Date getPublishDate() {
-        return publishDate;
-    }
-
-    public void setPublishDate(Date publishDate) {
-        this.publishDate = publishDate;
-    }
-
-    public Date getInvalidDate() {
-        return invalidDate;
-    }
-
-    public void setInvalidDate(Date invalidDate) {
-        this.invalidDate = invalidDate;
-    }
 
 }
