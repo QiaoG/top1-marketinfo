@@ -6,10 +6,12 @@ package com.top1.marketinfo.entity;
 */
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Data
 @Entity
 public class News {
 
@@ -35,67 +37,7 @@ public class News {
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
-    public int getStatus() {
-        return status;
-    }
+    @Transient
+    private int discussCount;
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public String getNewsSource() {
-        return newsSource;
-    }
-
-    public void setNewsSource(String newsSource) {
-        this.newsSource = newsSource;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public int getAuthorId() {
-        return authorId;
-    }
-
-    public void setAuthorId(int authorId) {
-        this.authorId = authorId;
-    }
-
-    public int getPublisherId() {
-        return publisherId;
-    }
-
-    public void setPublisherId(int publisherId) {
-        this.publisherId = publisherId;
-    }
 }

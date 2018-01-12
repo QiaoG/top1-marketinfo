@@ -17,4 +17,6 @@ public abstract class AbstractJdbcService {
     }
 
     protected JdbcTemplate jdbcTemplate;
+
+    protected int pageSize = 20;
 }
