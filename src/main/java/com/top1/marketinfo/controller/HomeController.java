@@ -49,7 +49,7 @@ public class HomeController {
 //        discuss.setAuthor(userRepository.findOne(discuss.getAuthor().getId()));
 //        discuss.setPublisher(userRepository.findOne(discuss.getPublisher().getId()));
 //        repository.save(discuss);
-        return new ResponseMessage(0,"");
+        return new ResponseMessage(0,"",null);
     }
 
 

@@ -19,7 +19,7 @@ import java.util.List;
 public class NewsServiceImpl extends AbstractJdbcService implements NewsService {
 
     private final String sqlAll = "SELECT id,title,content,author_id,news_source,publisher_id,create_date,`status`," +
-            "(SELECT count(discuss.id) FROM discuss WHERE discuss.discuss_source=news.id) discuss_count " +
+            "(SELECT count(discuss.id) FROM discuss WHERE discuss.discuss_source=news.id and source_type=0) discuss_count " +
             "FROM news ORDER BY create_date DESC";
 
     @Autowired

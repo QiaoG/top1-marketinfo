@@ -37,5 +37,7 @@ public class Demand {
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
+    @Transient
+    private int discussCount;
 
 }
