@@ -26,6 +26,9 @@ public class User {
 
     private String nickname;
 
+    //用户在微信系统中的唯一标示：openid
+    private String wxCode;
+
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Enterprise enterprise;
 

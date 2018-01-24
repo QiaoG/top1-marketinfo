@@ -24,8 +24,8 @@ public class NewsController {
     private NewsService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<News> findAll(){
-        List list = service.findAll();
+    public List<News> findAll(Integer page,Integer size){
+        List list = service.findAll(page==null?1:page,size==null?20:size);
         log.info("all news size = "+list.size());
         return list;
     }

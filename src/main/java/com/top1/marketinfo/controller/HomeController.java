@@ -8,10 +8,12 @@ import com.top1.marketinfo.entity.Discuss;
 import com.top1.marketinfo.repository.DiscussRepository;
 import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.UserService;
+import com.top1.marketinfo.service.WeiXinService;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,26 +25,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
 
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private DiscussRepository repository;
-
-    @Autowired
-    private UserService service;
-
    @RequestMapping(value = "/", method = RequestMethod.GET)
     public @ResponseBody String home(){
         return "home";
     }
 
-    @RequestMapping(value = "/api/count/users", method = RequestMethod.GET)
-    public @ResponseBody String countUsers(){
-        return service.demo()+"";
-    }
 
-    @RequestMapping(value = "/api/add/discuss", method = RequestMethod.POST)
+    @RequestMapping(value = "/api/add/disc", method = RequestMethod.POST)
     public @ResponseBody ResponseMessage addDiscuss(@RequestBody Discuss discuss){
 
         log.info(discuss.getDiscussSource()+":"+discuss.getContent());

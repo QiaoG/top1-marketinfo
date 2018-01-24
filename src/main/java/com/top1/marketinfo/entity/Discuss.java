@@ -36,7 +36,9 @@ public class Discuss {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createDate;
 
-    private int authorId;
+    private Integer authorId=-1;
+
+    private String authorNickName;
 
     private int publisherId;
 
