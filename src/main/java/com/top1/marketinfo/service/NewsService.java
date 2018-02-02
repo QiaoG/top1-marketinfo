@@ -10,5 +10,5 @@ import java.util.List;
 * Time:下午4:14
 */
 public interface NewsService {
-    public List<News> findAll(int page,int size);
+    public List<News> findAll(int verify,int page,int size);
 }

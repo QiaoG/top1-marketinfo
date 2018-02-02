@@ -24,10 +24,13 @@ public class News {
 
     private int authorId;
 
+    private String authorNickName;
+
     private String newsSource;
 
     private String title = "";
 
+    @Column(columnDefinition = "bigint default 0 ")
     private int publisherId;
 
     @Temporal(TemporalType.TIMESTAMP)

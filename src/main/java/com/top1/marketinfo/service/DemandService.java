@@ -11,5 +11,5 @@ import java.util.List;
 */
 public interface DemandService {
 
-    public List<Demand> findAll(int page,int size);
+    public List<Demand> findAll(int verify,int page,int size);
 }

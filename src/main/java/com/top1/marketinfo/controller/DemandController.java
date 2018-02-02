@@ -25,8 +25,8 @@ public class DemandController {
     private DemandService service;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Demand> findAll(Integer page,Integer size) {
-        List list = service.findAll(page==null?1:page,size==null?20:size);
+    public List<Demand> findAll(Integer verify,Integer page,Integer size) {
+        List list = service.findAll(verify==null?1:verify,page==null?1:page,size==null?20:size);
         return list;
     }
 }

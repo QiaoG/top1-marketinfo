@@ -18,19 +18,19 @@ import java.util.List;
 @Service
 public class DemandServiceImpl extends AbstractJdbcService implements DemandService {
 
-    private final String sqlAll = "SELECT id,type,content,publisher_id,publish_date,invalid_date,`status`,title," +
+    private final String sqlAll = "SELECT id,type,content,publisher_id,publish_date,invalid_date,`status`,title,publisher_nick_name,verify_id," +
             "(SELECT count(discuss.id) FROM discuss WHERE discuss.discuss_source=demand.id and source_type=1) discuss_count " +
-            "FROM demand ORDER BY publish_date DESC LIMIT ?,?";
+            "FROM demand where status=? ORDER BY publish_date DESC LIMIT ?,?";
 
     public DemandServiceImpl(DataSource dataSource) {
         super(dataSource);
     }
 
     @Override
-    public List<Demand> findAll(int page,int size) {
+    public List<Demand> findAll(int verify,int page,int size) {
         final List<Demand> list = new ArrayList<>();
         int offset = page * size;
-        this.jdbcTemplate.query(sqlAll,new Object[]{offset,size}, rs -> {
+        this.jdbcTemplate.query(sqlAll,new Object[]{verify,offset,size}, rs -> {
             Demand demand = new Demand();
             demand.setId(rs.getLong(1));
             demand.setType(DemandType.values()[rs.getInt(2)]);
@@ -40,7 +40,9 @@ public class DemandServiceImpl extends AbstractJdbcService implements DemandServ
             demand.setInvalidDate(rs.getTimestamp(6));
             demand.setStatus(rs.getInt(7));
             demand.setTitle(rs.getString(8));
-            demand.setDiscussCount(rs.getInt(9));
+            demand.setPublisherNickName(rs.getString(9));
+            demand.setVerifyId(rs.getInt(10));
+            demand.setDiscussCount(rs.getInt(11));
             list.add(demand);
         });
         return list;
