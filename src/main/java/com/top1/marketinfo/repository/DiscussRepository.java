@@ -18,6 +18,12 @@ import java.util.List;
 public interface DiscussRepository extends JpaRepository<Discuss,Long> {
 
     @RestResource(path = "sourceAndType",rel = "sourceAndType")
-    @Query(value = "select * from discuss where discuss_source=? and source_type=? ORDER BY create_date DESC limit ?,?",nativeQuery = true)
-    List<Discuss> findByDiscussSourceAndSourceType(@Param("source")int source, @Param("type") int type,@Param("offset") int page,@Param("size") int size);
+    @Query(value = "select * from discuss where status=? and discuss_source=? and source_type=? ORDER BY create_date DESC limit ?,?",nativeQuery = true)
+    List<Discuss> findByDiscussSourceAndSourceType(@Param("status")int status,@Param("source")int source, @Param("type") int type,@Param("offset") int page,@Param("size") int size);
+
+    @RestResource(path = "statusAndType",rel = "statusAndType")
+    @Query(value = "select * from discuss where status=? and source_type=? ORDER BY create_date DESC limit ?,?",nativeQuery = true)
+    List<Discuss> findByStatus(@Param("status")int status,@Param("type") int type,@Param("offset") int page,@Param("size") int size);
+
+
 }

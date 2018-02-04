@@ -19,7 +19,7 @@ import java.util.List;
 public class NewsServiceImpl extends AbstractJdbcService implements NewsService {
 
     private final String sqlAll = "SELECT id,title,left(content,100),author_id,news_source,publisher_id,create_date,`status`,author_nick_name," +
-            "(SELECT count(discuss.id) FROM discuss WHERE discuss.discuss_source=news.id and source_type=0) discuss_count " +
+            "(SELECT count(discuss.id) FROM discuss WHERE discuss.discuss_source=news.id and source_type=0 and discuss.status=1) discuss_count " +
             "FROM news where status=? ORDER BY create_date DESC limit ?,?";
 
     @Autowired

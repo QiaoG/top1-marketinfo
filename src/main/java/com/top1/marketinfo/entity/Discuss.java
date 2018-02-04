@@ -30,6 +30,8 @@ public class Discuss {
     @Column(columnDefinition = "tinyint COMMENT '0:news,1:demand'")
     private int sourceType;
 
+    private String sourceTitle;
+
     private String content;
 
     @Temporal(TemporalType.TIMESTAMP)

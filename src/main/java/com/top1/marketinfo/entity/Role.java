@@ -20,7 +20,7 @@ public enum Role {
 
     @JsonValue
     public String getName() {
-        return name()+"|" + name;
+        return id+"|"+name()+"|" + name;
     }
 
     public void setName(String name) {
