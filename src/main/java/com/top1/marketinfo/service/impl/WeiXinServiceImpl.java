@@ -6,8 +6,6 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicHeader;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 import org.json.JSONException;

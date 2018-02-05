@@ -25,5 +25,8 @@ public interface DiscussRepository extends JpaRepository<Discuss,Long> {
     @Query(value = "select * from discuss where status=? and source_type=? ORDER BY create_date DESC limit ?,?",nativeQuery = true)
     List<Discuss> findByStatus(@Param("status")int status,@Param("type") int type,@Param("offset") int page,@Param("size") int size);
 
+    @RestResource(path = "authorAndType",rel = "authorAndType")
+    @Query(value = "select * from discuss where author_id=? and source_type=? ORDER BY create_date DESC limit ?,?",nativeQuery = true)
+    List<Discuss> findByAuthor(@Param("author")long author,@Param("type") int type,@Param("offset") int page,@Param("size") int size);
 
 }
