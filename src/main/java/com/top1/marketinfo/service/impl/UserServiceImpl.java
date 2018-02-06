@@ -5,9 +5,12 @@ import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.AbstractJdbcService;
 import com.top1.marketinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.List;
 
 /*
 * Author GQ
@@ -31,6 +34,12 @@ public class UserServiceImpl extends AbstractJdbcService implements UserService{
     public int demo() {
         int c = this.jdbcTemplate.queryForObject(sqlOne, Integer.class);
         return c;
+    }
+
+    @Override
+    public List<User> findByNickName(String name,int page,int size) {
+        Page<User> pages = repository.findByNicknameLike("%"+name+"%",new PageRequest(page,size));
+        return pages.getContent();
     }
 
     @Override

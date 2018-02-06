@@ -3,6 +3,8 @@ package com.top1.marketinfo.service;
 import com.top1.marketinfo.entity.User;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /*
 * Author GQ
 * Date:2018/1/5
@@ -12,4 +14,6 @@ public interface UserService {
     public int demo();
 
     public int saveUser(User user);
+
+    public List<User> findByNickName(String name,int page,int size);
 }

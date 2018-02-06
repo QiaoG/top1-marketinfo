@@ -2,6 +2,9 @@ package com.top1.marketinfo.repository;
 
 import com.top1.marketinfo.entity.Discuss;
 import com.top1.marketinfo.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,8 +20,10 @@ import java.util.List;
 */
 @RepositoryRestResource(path="user")
 public interface UserRepository extends JpaRepository<User,Long> {
+
     @RestResource(path = "findByNickname",rel = "findByNickname")
-    //@Query(value = "select * from user where nickname=? ",nativeQuery = true)
-    List<User> findByNickname(@Param("name")String name);
+    List<User> findByNickname(@Param("name") String name);
+
+    Page<User> findByNicknameLike(String name, Pageable pageable);
 
 }

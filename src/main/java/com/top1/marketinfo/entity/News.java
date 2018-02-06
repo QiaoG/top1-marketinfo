@@ -40,6 +40,10 @@ public class News {
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
+    //证劵代码6位
+    @Column(columnDefinition="VARCHAR(6) ")
+    private String code;
+
     @Transient
     private int discussCount;
 
