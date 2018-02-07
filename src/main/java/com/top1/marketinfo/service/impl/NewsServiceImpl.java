@@ -20,7 +20,7 @@ public class NewsServiceImpl extends AbstractJdbcService implements NewsService 
 
     private final String sqlAll = "SELECT id,title,left(content,100),author_id,news_source,publisher_id,create_date,`status`,author_nick_name," +
             "(SELECT count(discuss.id) FROM discuss WHERE discuss.discuss_source=news.id and source_type=0 and discuss.status=1) discuss_count " +
-            "FROM news where status=? ORDER BY create_date DESC limit ?,?";
+            "FROM news where status=? and title like ? ORDER BY create_date DESC limit ?,?";
 
     @Autowired
     @SuppressWarnings("unchecked")
@@ -29,10 +29,10 @@ public class NewsServiceImpl extends AbstractJdbcService implements NewsService 
     }
 
     @Override
-    public List<News> findAll(int verify,int page,int size) {
+    public List<News> findAll(String title,int verify,int page,int size) {
         final List<News> list = new ArrayList<>();
-        int offset = (page-1)*size;
-        this.jdbcTemplate.query(sqlAll, new Object[]{verify,offset,size},rs -> {
+        int offset = page*size;
+        this.jdbcTemplate.query(sqlAll, new Object[]{verify,"%"+(title==null?"":title.trim())+"%",offset,size},rs -> {
             News news = new News();
             news.setId(rs.getLong(1));
             news.setTitle(rs.getString(2));
