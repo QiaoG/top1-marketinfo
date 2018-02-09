@@ -1,6 +1,8 @@
 package com.top1.marketinfo.controller;
 
+import com.top1.marketinfo.WXException;
 import com.top1.marketinfo.service.WeiXinService;
+import com.top1.marketinfo.vo.WxSession;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,14 +29,20 @@ public class WeChatController {
     public @ResponseBody
     ResponseMessage onLogin(@Param("code") String code){
         if(code == null || code.isEmpty()){
-            return new ResponseMessage(-1,"",null);
+            return new ResponseMessage(-1,"code不能为空！",null);
         }
-//        log.info("[wx] jscode = "+code);
-        String key = wxService.getSession(code);
-        log.info("[wx] jscode:"+code+" -> "+"key:"+key);
-        JSONObject js = new JSONObject();
-        js.put("sessionKey",key);
-        return new ResponseMessage(0,"ok",js);
+        WxSession js = null;
+        try {
+            String key = wxService.getSession(code);
+            log.info("[wx] jscode:"+code+" -> "+"key:"+key);
+            js = new WxSession();
+            js.setSessionKey(key);
+            return new ResponseMessage(0,"ok",js);
+        } catch (WXException e) {
+            log.error(e.toString());
+            return new ResponseMessage(1,e.getMessage(),null);
+        }
+
     }
 
     @RequestMapping(value = "/dcymobile", method = RequestMethod.GET)
@@ -42,13 +50,19 @@ public class WeChatController {
         log.info("[wx] decrypt,key = "+key);
         try {
             String info = wxService.decrypt(key,encData,iv);
+            if(info == null){
+
+            }
             String v = wxService.handlePhone(info);
             log.info("[wx] decrypt,info:"+info);
             JSONObject js = new JSONObject(info);
             return new ResponseMessage(0,"ok",js);
-        } catch (Exception e) {
+        } catch (WXException e) {
             log.error("[wx] decrypt error:"+e.getMessage(),e);
-            return new ResponseMessage(-1,"fail",null);
+            return new ResponseMessage(1,e.getMessage(),null);
+        } catch (Exception e) {
+           log.error("未知异常：",e);
+            return new ResponseMessage(1,"后台程序错误："+e.getMessage(),null);
         }
 
     }

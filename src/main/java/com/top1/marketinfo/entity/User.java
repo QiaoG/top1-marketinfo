@@ -24,7 +24,7 @@ public class User {
 
     private String mobile;
 
-    @Column(columnDefinition="VARCHAR(6) BINARY")
+    @Column(columnDefinition="VARCHAR(50) BINARY")
     private String nickname;
 
     //用户在微信系统中的唯一标示：openid

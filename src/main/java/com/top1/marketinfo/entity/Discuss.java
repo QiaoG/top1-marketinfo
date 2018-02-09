@@ -40,6 +40,7 @@ public class Discuss {
 
     private Integer authorId=-1;
 
+    @Column(columnDefinition="VARCHAR(50) BINARY")
     private String authorNickName;
 
     private int publisherId;

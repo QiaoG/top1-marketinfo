@@ -1,7 +1,9 @@
 package com.top1.marketinfo.service.impl;
 
+import com.top1.marketinfo.WXException;
 import com.top1.marketinfo.service.WeiXinService;
 import com.top1.marketinfo.utils.SSLClient;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -25,6 +27,7 @@ import java.util.UUID;
 * Date:2018/1/24
 * Time:上午10:01
 */
+@Slf4j
 @Service
 public class WeiXinServiceImpl implements WeiXinService {
 
@@ -39,17 +42,32 @@ public class WeiXinServiceImpl implements WeiXinService {
         String r = "-1";
         try {
             JSONObject jObject = new JSONObject(v);
+            if(!jObject.has("session_key")){
+                throw new WXException("1001","获取微信session失败！");
+            }
             r = UUID.randomUUID().toString();
             cach.put(r,jObject);
+            log.info("[wx] put session in cach, ("+r+","+v+")");
         } catch (JSONException e) {
-            e.printStackTrace();
+            log.error("json error:",e);
+            throw new WXException("0001",e.getMessage());
         }
         return r;
     }
 
     @Override
     public String decrypt(String sessionKey,String encData,String iv) throws Exception{
-        String session = cach.get(sessionKey).getString("session_key");
+        JSONObject json = cach.get(sessionKey);
+        if(json == null){
+            throw new WXException("1002","从缓存获取session失败！");
+        }
+        String session = "";
+        if(json.has("session_key")) {
+            session = json.getString("session_key");
+        }else{
+            cach.remove(sessionKey);
+            throw new WXException("1003","session值获取失败！");
+        }
 
         byte[] encrypData = Base64.decodeBase64(encData);
         byte[] ivData = Base64.decodeBase64(iv);
@@ -93,17 +111,17 @@ public class WeiXinServiceImpl implements WeiXinService {
         //openId:oRtgV0Sx13cNvscdc0oHeRPDHCuA
 
         WeiXinServiceImpl s = new WeiXinServiceImpl();
-        String key = s.getSession("001uvfvw0hnWmi1e5tyw0owivw0uvfvm");
+        String key = s.getSession("0714rP1Y1SQzET0qyw1Y1FcI1Y14rP1c");
         System.out.println(s.cach.get(key));
 
-//        String encData = "mIxOXOE3dzUkfmzepsNaIy64iR9TyBs77WOkP7MK6YhTynlsPWI49Ttk7r058E9eIMaoCsiGSszaObKkSXUmfo1+gnPHuuuYSFSiZl6fqzhx9459G35M+XyG2kEPcvWcTUwpX1qKPYs/vg80nOr01i6gAcT6cNPMDpjcXd1Xx1BnVG0ehxsoR2lWt4X8ObXEyERUwpiQS6UUV+B9xvMzpKZeE+gYW5SxoGmWIQWhtTowoDVrsjQBE6uy1MFY68ykdMb6vtlqq9rufeE1XGNk5P63r6UHhAfTLER+Ic6jI0+Wpe4qlOLUwtrhCbZfkgdzsrD26Z0PYBMhhY7BSzhkR0/2oWvbSdP+kixDDgMecAEEgBQObMegSacu0X41ZE6blhpLzZ8DifV/AiZljK/UqyD5DsMMoJo3AwFgQZ+IqfFe/B1IPURwcDoA8b1RU7BltNpsFGI46NKDGe4xPB+y1g==";
-//        String iv = "g7Sycl5/+BRJ6U7F04WFKg==";
-//        try {
-//            String v = s.decrypt(key, encData, iv);
-//            System.out.println("### "+v);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        String encData = "mshk65+k7tUMD3opkX/dJeNNbv9fTBbCz8+Z6A+EmtBIPMRmHaIGst+JjZ7YYfyydn9368o8ginwZucZuQOsAe0uNdnXZshD0CuxsMrY8ggaRlR12iy5rq5CxwHBfb5j1XLdkvG0TVzJDaZjN8bTjxk+rBQ4XGzGhzLEdJ2TsJrjdPqqX/QUCwN+RJWAhBGOvqycCFt6VNIDpHFFxAZ8Ejg1dnJiRMs/tAoqj07qB5gYOZAGehfs8DfYO0hgA0nZqPZk3yDt+XXAsYK4IEE9NJT3vnyuTZKy7c59msFnWH8P3LbSsqxvNiIObV43tnN6aN4QL6LrCYjX22BNg9Cv8NdGfLFkOV+TWz0oojK5qIZ5HLBHF3xodELYXAwaJrLBUQisMs2VqA+sGnYSZfAg7ZvC9i0BFPpf1oOJT7/xbtMQ5I7EibDOisOea1bEJQjt7LCIsgeC7eswOZiwRNGr/g==";
+        String iv = "keICWhQLUEP882P9pPfFQQ==";
+        try {
+            String v = s.decrypt(key, encData, iv);
+            System.out.println("### "+v);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

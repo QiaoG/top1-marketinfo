@@ -24,6 +24,7 @@ public class News {
 
     private int authorId;
 
+    @Column(columnDefinition="VARCHAR(50) BINARY")
     private String authorNickName;
 
     private String newsSource;
