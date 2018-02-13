@@ -1,4 +1,4 @@
-package com.top1.marketinfo;
+package com.top1.marketinfo.exception;
 
 import lombok.Data;
 

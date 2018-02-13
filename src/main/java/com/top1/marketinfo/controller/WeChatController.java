@@ -1,6 +1,8 @@
 package com.top1.marketinfo.controller;
 
-import com.top1.marketinfo.WXException;
+import com.top1.marketinfo.entity.User;
+import com.top1.marketinfo.exception.WXException;
+import com.top1.marketinfo.service.UserService;
 import com.top1.marketinfo.service.WeiXinService;
 import com.top1.marketinfo.vo.WxSession;
 import lombok.extern.slf4j.Slf4j;
@@ -25,15 +27,27 @@ public class WeChatController {
     @Autowired
     private WeiXinService wxService;
 
+    @Autowired
+    private UserService userService;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseMessage onLogin(@Param("code") String code){
+    ResponseMessage login(@Param("code") String code){
+        String key = wxService.getSessionKey(code);
+        JSONObject json = wxService.getSessionInCach(key);
+        User user = userService.getByWxOpenid(json.getString("openid"));
+        return new ResponseMessage(0,"",user);
+    }
+
+    @RequestMapping(value = "/sessionKey", method = RequestMethod.GET)
+    public @ResponseBody
+    ResponseMessage getSessionKey(@Param("code") String code){
         if(code == null || code.isEmpty()){
             return new ResponseMessage(-1,"code不能为空！",null);
         }
         WxSession js = null;
         try {
-            String key = wxService.getSession(code);
+            String key = wxService.getSessionKey(code);
             log.info("[wx] jscode:"+code+" -> "+"key:"+key);
             js = new WxSession();
             js.setSessionKey(key);
@@ -49,14 +63,13 @@ public class WeChatController {
     public @ResponseBody ResponseMessage decryptMobile(@Param("key") String key,@Param("encData") String encData,@Param("iv") String iv){
         log.info("[wx] decrypt,key = "+key);
         try {
-            String info = wxService.decrypt(key,encData,iv);
+            JSONObject info = wxService.decrypt(key,encData,iv);
             if(info == null){
-
+                return new ResponseMessage(1,"解析手机号异常！",null);
             }
-            String v = wxService.handlePhone(info);
             log.info("[wx] decrypt,info:"+info);
-            JSONObject js = new JSONObject(info);
-            return new ResponseMessage(0,"ok",js);
+            User user = wxService.handlePhone(info);
+            return new ResponseMessage(0,"ok",user);
         } catch (WXException e) {
             log.error("[wx] decrypt error:"+e.getMessage(),e);
             return new ResponseMessage(1,e.getMessage(),null);

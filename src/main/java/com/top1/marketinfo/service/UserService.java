@@ -13,7 +13,9 @@ import java.util.List;
 public interface UserService {
     public int demo();
 
-    public int saveUser(User user);
+    public User saveUser(User user);
 
     public List<User> findByNickName(String name,int page,int size);
+
+    public User getByWxOpenid(String openid);
 }

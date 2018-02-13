@@ -39,4 +39,6 @@ public class User {
 
     private Role role = Role.GENERAL;
 
+    private String avatarUrl;//头像地址
+
 }

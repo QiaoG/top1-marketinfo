@@ -26,4 +26,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     Page<User> findByNicknameLike(String name, Pageable pageable);
 
+    List<User> findByWxCode(String code);
+
 }

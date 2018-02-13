@@ -5,11 +5,13 @@ import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.AbstractJdbcService;
 import com.top1.marketinfo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -43,7 +45,14 @@ public class UserServiceImpl extends AbstractJdbcService implements UserService{
     }
 
     @Override
-    public int saveUser(User user) {
-        return 0;
+    public User saveUser(User user) {
+        User s = repository.save(user);
+        return s;
+    }
+
+    @Override
+    public User getByWxOpenid(String openid) {
+        List<User> users = repository.findByWxCode(openid);
+        return users.size()>0? users.get(0):null;
     }
 }
