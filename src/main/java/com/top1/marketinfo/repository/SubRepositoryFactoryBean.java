@@ -1,4 +1,4 @@
-package com.top1.marketinfo.configuration;
+package com.top1.marketinfo.repository;
 
 import com.top1.marketinfo.intercept.VerifyPostProcessor;
 import org.springframework.beans.factory.annotation.Autowired;

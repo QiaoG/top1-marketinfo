@@ -1,5 +1,6 @@
 package com.top1.marketinfo.configuration;
 
+import com.top1.marketinfo.repository.SubRepositoryFactoryBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 

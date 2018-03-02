@@ -13,6 +13,12 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'war'
+
+war {
+	baseName = 'market-info'
+	version = '1.0.0'
+}
 
 group = 'com.top1'
 version = '0.0.1-SNAPSHOT'
@@ -32,10 +38,13 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.json/json
 	compile group: 'org.json', name: 'json', version: '20160810'
 
+	// https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt
+	compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.0'
 
 	compile('org.springframework.boot:spring-boot-starter-actuator')
 	compile('org.springframework.boot:spring-boot-starter-data-jpa')
 	compile('org.springframework.boot:spring-boot-starter-data-rest')//已经包含starter-web
+//	compile("org.springframework.boot:spring-boot-starter-security")
 	//compile('org.springframework.boot:spring-boot-starter-web')
 	//compile('com.h2database:h2')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
