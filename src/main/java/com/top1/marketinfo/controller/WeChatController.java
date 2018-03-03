@@ -5,14 +5,19 @@ import com.top1.marketinfo.exception.WXException;
 import com.top1.marketinfo.service.UserService;
 import com.top1.marketinfo.service.WeiXinService;
 import com.top1.marketinfo.vo.WxSession;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Date;
 
 /*
 * Author GQ
@@ -23,6 +28,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Slf4j
 @RequestMapping(value = "/wx")
 public class WeChatController {
+
+    @Value("${jwt.secretkey:market_info}")
+    private String secretkey;
 
     @Autowired
     private WeiXinService wxService;
@@ -36,6 +44,10 @@ public class WeChatController {
         String key = wxService.getSessionKey(code);
         JSONObject json = wxService.getSessionInCach(key);
         User user = userService.getByWxOpenid(json.getString("openid"));
+        String token = Jwts.builder().setSubject("Authorization")
+                .claim("nickname", user.getNickname()).setIssuedAt(new Date())
+                .signWith(SignatureAlgorithm.HS256, secretkey).compact();
+        user.setToken(token);
         return new ResponseMessage(0,"",user);
     }
 
