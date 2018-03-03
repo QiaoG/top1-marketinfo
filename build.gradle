@@ -16,7 +16,7 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'war'
 
 war {
-	baseName = 'market-info'
+	baseName = 'marketinfo'
 	version = '1.0.0'
 }
 
