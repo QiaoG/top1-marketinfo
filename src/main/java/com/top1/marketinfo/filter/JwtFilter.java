@@ -21,7 +21,6 @@ import java.io.IOException;
 * Time:下午7:47
 */
 @Slf4j
-@Component
 public class JwtFilter extends GenericFilterBean {
 
     public void setSecretkey(String secretkey) {
@@ -37,14 +36,10 @@ public class JwtFilter extends GenericFilterBean {
         final String method = request.getMethod();
         log.info("##### request method: "+method+" "+secretkey);
 
-        if(true){
-            throw new ServletException("Invalid token.");
-        }
-
         if("POST".equals(method)|| "PUT".equals(method) || "DELETE".equals(method)){
             //客户端将token封装在请求头中，格式为（Bearer后加空格）：Authorization：Bearer +token
             final String authHeader = request.getHeader("Authorization");
-
+            log.info("auth header: "+authHeader);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 throw new ServletException("Missing or invalid Authorization header.");
             }
@@ -54,15 +49,17 @@ public class JwtFilter extends GenericFilterBean {
 
             try {
                 //解密token，拿到里面的对象claims
-                final Claims claims = Jwts.parser().setSigningKey("secretkey")
+                final Claims claims = Jwts.parser().setSigningKey(secretkey)
                         .parseClaimsJws(token).getBody();
                 //将对象传递给下一个请求
                 request.setAttribute("claims", claims);
             }
-            catch (final SignatureException e) {
-                throw new ServletException("Invalid token.");
+            catch (final Exception e) {
+                throw new ServletException("Invalid token."+e.getMessage());
             }
         }
+//        if(true)
+//            throw new ServletException("***** Invalid token. ****"+request.getAttribute("claims"));
 
         chain.doFilter(req, res);
     }

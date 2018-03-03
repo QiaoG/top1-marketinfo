@@ -41,4 +41,7 @@ public class User {
 
     private String avatarUrl;//头像地址
 
+    @Transient
+    private String token;
+
 }
