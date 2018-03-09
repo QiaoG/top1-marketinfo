@@ -11,7 +11,7 @@ import java.util.List;
 * Time:下午4:12
 */
 public interface UserService {
-    public int demo();
+    public int count();
 
     public User saveUser(User user);
 

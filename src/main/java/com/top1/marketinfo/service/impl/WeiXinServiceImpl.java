@@ -1,8 +1,10 @@
 package com.top1.marketinfo.service.impl;
 
+import com.top1.marketinfo.entity.Role;
 import com.top1.marketinfo.entity.User;
 import com.top1.marketinfo.exception.WXException;
 import com.top1.marketinfo.repository.UserRepository;
+import com.top1.marketinfo.service.UserService;
 import com.top1.marketinfo.service.WeiXinService;
 import com.top1.marketinfo.utils.SSLClient;
 import lombok.extern.slf4j.Slf4j;
@@ -37,8 +39,11 @@ public class WeiXinServiceImpl implements WeiXinService {
 
     public Map<String, JSONObject> cach = new HashMap<>();
 
+//    @Autowired
+//    private UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    private UserService service;
 
     @Override
     public JSONObject getSessionInCach(String key) {
@@ -105,11 +110,15 @@ public class WeiXinServiceImpl implements WeiXinService {
     @Override
     public User handlePhone(JSONObject json) {
         String phoneNumber = json.getString("phoneNumber");
+        int c = service.count();
         User user = new User();
         user.setCreateDate(new Date());
         user.setWxCode(json.getString("openid"));
         user.setMobile(phoneNumber);
-        User ru = userRepository.save(user);
+        if(c > 0){
+            user.setRole(Role.MANAGER);
+        }
+        User ru = service.saveUser(user);
         return ru;
     }
 

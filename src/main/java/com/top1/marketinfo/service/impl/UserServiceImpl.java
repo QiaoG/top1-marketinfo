@@ -33,7 +33,7 @@ public class UserServiceImpl extends AbstractJdbcService implements UserService{
     }
 
     @Override
-    public int demo() {
+    public int count() {
         int c = this.jdbcTemplate.queryForObject(sqlOne, Integer.class);
         return c;
     }
