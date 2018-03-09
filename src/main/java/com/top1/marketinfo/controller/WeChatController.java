@@ -44,6 +44,7 @@ public class WeChatController {
         String key = wxService.getSessionKey(code);
         JSONObject json = wxService.getSessionInCach(key);
         User user = userService.getByWxOpenid(json.getString("openid"));
+        log.info("get user by openid, is "+(user==null?"":"not ")+" null");
         if(user != null) {
             String token = Jwts.builder().setSubject("Authorization")
                     .claim("nickname", user.getNickname()).setIssuedAt(new Date())
