@@ -44,10 +44,12 @@ public class WeChatController {
         String key = wxService.getSessionKey(code);
         JSONObject json = wxService.getSessionInCach(key);
         User user = userService.getByWxOpenid(json.getString("openid"));
-        String token = Jwts.builder().setSubject("Authorization")
-                .claim("nickname", user.getNickname()).setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, secretkey).compact();
-        user.setToken(token);
+        if(user != null) {
+            String token = Jwts.builder().setSubject("Authorization")
+                    .claim("nickname", user.getNickname()).setIssuedAt(new Date())
+                    .signWith(SignatureAlgorithm.HS256, secretkey).compact();
+            user.setToken(token);
+        }
         return new ResponseMessage(0,"",user);
     }
 
@@ -81,6 +83,10 @@ public class WeChatController {
             }
             log.info("[wx] decrypt,info:"+info);
             User user = wxService.handlePhone(info);
+            String token = Jwts.builder().setSubject("Authorization")
+                    .claim("nickname", user.getNickname()).setIssuedAt(new Date())
+                    .signWith(SignatureAlgorithm.HS256, secretkey).compact();
+            user.setToken(token);
             return new ResponseMessage(0,"ok",user);
         } catch (WXException e) {
             log.error("[wx] decrypt error:"+e.getMessage(),e);
