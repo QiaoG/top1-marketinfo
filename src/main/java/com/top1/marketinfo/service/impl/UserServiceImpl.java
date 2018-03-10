@@ -4,12 +4,14 @@ import com.top1.marketinfo.entity.User;
 import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.AbstractJdbcService;
 import com.top1.marketinfo.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +22,12 @@ import java.util.List;
 * Time:下午6:13
 */
 @Service
+@Slf4j
 public class UserServiceImpl extends AbstractJdbcService implements UserService{
 
     private final String sqlOne = "select count(*) from user";
+
+    private final String sqlset = "set character_set_server=utf8";
 
     @Autowired
     private UserRepository repository;

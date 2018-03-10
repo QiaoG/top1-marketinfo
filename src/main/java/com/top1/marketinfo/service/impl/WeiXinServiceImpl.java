@@ -115,6 +115,7 @@ public class WeiXinServiceImpl implements WeiXinService {
         user.setCreateDate(new Date());
         user.setWxCode(json.getString("openid"));
         user.setMobile(phoneNumber);
+//        user.setWxNumber("测试");
         if(c == 0){
             user.setRole(Role.MANAGER);
         }

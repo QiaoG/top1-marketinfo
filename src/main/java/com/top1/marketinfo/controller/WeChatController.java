@@ -75,8 +75,9 @@ public class WeChatController {
     }
 
     @RequestMapping(value = "/dcymobile", method = RequestMethod.GET)
-    public @ResponseBody ResponseMessage decryptMobile(@Param("key") String key,@Param("encData") String encData,@Param("iv") String iv){
-        log.info("[wx] decrypt,key = "+key);
+    public @ResponseBody ResponseMessage decryptMobile(@Param("key") String key,@Param("encData") String encData,
+                                                       @Param("iv") String iv){
+        log.info("[wx] decrypt,key = "+key+" test: ");
         try {
             JSONObject info = wxService.decrypt(key,encData,iv);
             if(info == null){
