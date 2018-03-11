@@ -78,9 +78,6 @@ public class WeiXinServiceImpl implements WeiXinService {
 
     @Override
     public JSONObject decrypt(String sessionKey,String encData,String iv) throws Exception{
-        log.info("key: "+sessionKey);
-        log.info("iv: " + iv);
-        log.info("encData: "+encData);
         JSONObject json = cach.get(sessionKey);
         if(json == null){
             throw new WXException("1002","从缓存获取session失败！");
@@ -115,7 +112,8 @@ public class WeiXinServiceImpl implements WeiXinService {
         user.setCreateDate(new Date());
         user.setWxCode(json.getString("openid"));
         user.setMobile(phoneNumber);
-//        user.setWxNumber("测试");
+        user.setNickname(json.getString("nickname"));
+        user.setAvatarUrl(json.getString("avatarUrl"));
         if(c == 0){
             user.setRole(Role.MANAGER);
         }

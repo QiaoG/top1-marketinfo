@@ -40,62 +40,65 @@ public class WeChatController {
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseMessage login(@Param("code") String code){
+    ResponseMessage login(@Param("code") String code) {
         String key = wxService.getSessionKey(code);
         JSONObject json = wxService.getSessionInCach(key);
         User user = userService.getByWxOpenid(json.getString("openid"));
-        log.info("get user by openid, is "+(user==null?"":"not ")+" null");
-        if(user != null) {
+        log.info("get user by openid, is " + (user == null ? "" : "not ") + " null");
+        if (user != null) {
             String token = Jwts.builder().setSubject("Authorization")
                     .claim("nickname", user.getNickname()).setIssuedAt(new Date())
                     .signWith(SignatureAlgorithm.HS256, secretkey).compact();
             user.setToken(token);
         }
-        return new ResponseMessage(0,"",user);
+        return new ResponseMessage(0, "", user);
     }
 
     @RequestMapping(value = "/sessionKey", method = RequestMethod.GET)
     public @ResponseBody
-    ResponseMessage getSessionKey(@Param("code") String code){
-        if(code == null || code.isEmpty()){
-            return new ResponseMessage(-1,"code不能为空！",null);
+    ResponseMessage getSessionKey(@Param("code") String code) {
+        if (code == null || code.isEmpty()) {
+            return new ResponseMessage(-1, "code不能为空！", null);
         }
         WxSession js = null;
         try {
             String key = wxService.getSessionKey(code);
-            log.info("[wx] jscode:"+code+" -> "+"key:"+key);
+            log.info("[wx] jscode:" + code + " -> " + "key:" + key);
             js = new WxSession();
             js.setSessionKey(key);
-            return new ResponseMessage(0,"ok",js);
+            return new ResponseMessage(0, "ok", js);
         } catch (WXException e) {
             log.error(e.toString());
-            return new ResponseMessage(1,e.getMessage(),null);
+            return new ResponseMessage(1, e.getMessage(), null);
         }
 
     }
 
     @RequestMapping(value = "/dcymobile", method = RequestMethod.GET)
-    public @ResponseBody ResponseMessage decryptMobile(@Param("key") String key,@Param("encData") String encData,
-                                                       @Param("iv") String iv){
-        log.info("[wx] decrypt,key = "+key+" test: ");
+    public @ResponseBody
+    ResponseMessage decryptMobile(@Param("key") String key, @Param("encData") String encData,
+                                  @Param("iv") String iv,@Param("nickname") String nickname,@Param("avatarUrl") String avatarUrl) {
+        log.info("[wx] decrypt,key = " + key + " avatarUrl: "+avatarUrl);
         try {
-            JSONObject info = wxService.decrypt(key,encData,iv);
-            if(info == null){
-                return new ResponseMessage(1,"解析手机号异常！",null);
+            JSONObject info = wxService.decrypt(key, encData, iv);
+            if (info == null) {
+                return new ResponseMessage(1, "解析手机号异常！", null);
             }
-            log.info("[wx] decrypt,info:"+info);
+            info.put("nickname", nickname);
+            info.put("avatarUrl",avatarUrl);
+            //log.info("[wx] decrypt,info:" + info);
             User user = wxService.handlePhone(info);
             String token = Jwts.builder().setSubject("Authorization")
                     .claim("nickname", user.getNickname()).setIssuedAt(new Date())
                     .signWith(SignatureAlgorithm.HS256, secretkey).compact();
             user.setToken(token);
-            return new ResponseMessage(0,"ok",user);
+            return new ResponseMessage(0, "ok", user);
         } catch (WXException e) {
-            log.error("[wx] decrypt error:"+e.getMessage(),e);
-            return new ResponseMessage(1,e.getMessage(),null);
+            log.error("[wx] decrypt error:" + e.getMessage(), e);
+            return new ResponseMessage(1, e.getMessage(), null);
         } catch (Exception e) {
-           log.error("未知异常：",e);
-            return new ResponseMessage(1,"后台程序错误："+e.getMessage(),null);
+            log.error("未知异常：", e);
+            return new ResponseMessage(1, "后台程序错误：" + e.getMessage(), null);
         }
 
     }
