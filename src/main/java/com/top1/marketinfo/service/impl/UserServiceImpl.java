@@ -29,6 +29,8 @@ public class UserServiceImpl extends AbstractJdbcService implements UserService{
 
     private final String sqlset = "set character_set_server=utf8";
 
+    private final String sqlCountOfVerify = "select ()+()+()";
+
     @Autowired
     private UserRepository repository;
 

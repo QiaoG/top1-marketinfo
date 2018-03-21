@@ -39,8 +39,8 @@ public class WeiXinServiceImpl implements WeiXinService {
 
     public Map<String, JSONObject> cach = new HashMap<>();
 
-//    @Autowired
-//    private UserRepository userRepository;
+    //用于发送模版消息
+    private JSONObject jsonAccessToken;
 
     @Autowired
     private UserService service;
@@ -119,6 +119,11 @@ public class WeiXinServiceImpl implements WeiXinService {
         }
         User ru = service.saveUser(user);
         return ru;
+    }
+
+    @Override
+    public void sendVerifyMessage(long id,int type,boolean pass) {
+
     }
 
 

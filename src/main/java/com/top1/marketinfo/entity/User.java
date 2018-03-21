@@ -44,4 +44,7 @@ public class User {
     @Transient
     private String token;
 
+    @Transient
+    private int verifyCount;//如是管理员，待审核（需求，热点，评论）数量
+
 }

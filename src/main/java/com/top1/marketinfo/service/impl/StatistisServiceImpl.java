@@ -21,6 +21,9 @@ public class StatistisServiceImpl extends AbstractJdbcService implements Statist
     private final String sqlCount = "select (select count(id) from news where status=0) nc," +
             "(select count(id) from demand where status=0) dc," +
             "(select count(id) from discuss where status = 0) sc;";
+    private final String sqlTotal = "select (select count(id) from news where status=0)+" +
+            "(select count(id) from demand where status=0) + " +
+            "(select count(id) from discuss where status = 0) as total;";
 
     @Autowired
     public StatistisServiceImpl(DataSource dataSource) {
@@ -42,5 +45,10 @@ public class StatistisServiceImpl extends AbstractJdbcService implements Statist
         }else{
             return new VerifyCountVO();
         }
+    }
+
+    @Override
+    public int getCountOfVerfy() {
+        return 0;
     }
 }

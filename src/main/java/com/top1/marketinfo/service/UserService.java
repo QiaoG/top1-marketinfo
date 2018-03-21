@@ -18,4 +18,5 @@ public interface UserService {
     public List<User> findByNickName(String name,int page,int size);
 
     public User getByWxOpenid(String openid);
+
 }

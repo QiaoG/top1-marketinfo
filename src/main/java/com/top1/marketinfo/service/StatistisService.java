@@ -11,4 +11,6 @@ import com.top1.marketinfo.vo.VerifyCountVO;
 public interface StatistisService {
 
     public VerifyCountVO aboutVerifyCount();
+
+    public int getCountOfVerfy();//获取未审核（需求，热点，评论）数量
 }

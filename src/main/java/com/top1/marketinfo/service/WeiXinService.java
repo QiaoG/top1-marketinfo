@@ -17,4 +17,8 @@ public interface WeiXinService {
     public String getSessionKey(String jscode);
     public JSONObject decrypt(String sessionKey,String encData,String iv) throws Exception;
     public User handlePhone(JSONObject info);
+
+    //审核完成后，通知发布者
+    //type:0 热点,1 需求
+    public void sendVerifyMessage(long id,int type,boolean pass);
 }

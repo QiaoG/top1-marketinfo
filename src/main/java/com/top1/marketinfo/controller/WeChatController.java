@@ -1,9 +1,12 @@
 package com.top1.marketinfo.controller;
 
+import com.top1.marketinfo.entity.Role;
 import com.top1.marketinfo.entity.User;
 import com.top1.marketinfo.exception.WXException;
+import com.top1.marketinfo.service.StatistisService;
 import com.top1.marketinfo.service.UserService;
 import com.top1.marketinfo.service.WeiXinService;
+import com.top1.marketinfo.vo.VerifyCountVO;
 import com.top1.marketinfo.vo.WxSession;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -38,12 +41,19 @@ public class WeChatController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private StatistisService statistisService;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public @ResponseBody
     ResponseMessage login(@Param("code") String code) {
         String key = wxService.getSessionKey(code);
         JSONObject json = wxService.getSessionInCach(key);
         User user = userService.getByWxOpenid(json.getString("openid"));
+        if(user.getRole().getId() < Role.GENERAL.getId()){//管理员
+            VerifyCountVO vo = statistisService.aboutVerifyCount();
+            user.setVerifyCount(vo.getDemandCount()+vo.getDiscussCount()+vo.getNewsCount());
+        }
         log.info("get user by openid, is " + (user == null ? "" : "not ") + " null");
         if (user != null) {
             String token = Jwts.builder().setSubject("Authorization")
@@ -88,6 +98,10 @@ public class WeChatController {
             info.put("avatarUrl",avatarUrl);
             //log.info("[wx] decrypt,info:" + info);
             User user = wxService.handlePhone(info);
+            if(user.getRole().getId() < Role.GENERAL.getId()){//管理员
+                VerifyCountVO vo = statistisService.aboutVerifyCount();
+                user.setVerifyCount(vo.getDemandCount()+vo.getDiscussCount()+vo.getNewsCount());
+            }
             String token = Jwts.builder().setSubject("Authorization")
                     .claim("nickname", user.getNickname()).setIssuedAt(new Date())
                     .signWith(SignatureAlgorithm.HS256, secretkey).compact();
