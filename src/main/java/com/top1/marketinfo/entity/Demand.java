@@ -22,6 +22,7 @@ public class Demand {
 
     private DemandType type = DemandType.OTHER;
 
+    @Column(columnDefinition="varchar(20480)")
     private String content = "";
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -37,12 +38,17 @@ public class Demand {
     private String publisherNickName;
 
     @Column(columnDefinition = "bigint default 0 ")
-    private int verifyId;//审核者用户id
+    private long verifyId;//审核者用户id
 
     @Column(columnDefinition = "tinyint default 0 COMMENT '0:no verify,1:has verify'")
     private int status = 0;
 
     private String title = "";
+
+    private String formId;//提交的表单id
+
+    @Transient
+    private String action;//拦截是识别操作，目前用于审核-微信通知用户
 
     @Transient
     private int discussCount;

@@ -1,5 +1,7 @@
 package com.top1.marketinfo.service;
 
+import com.top1.marketinfo.entity.Demand;
+import com.top1.marketinfo.entity.News;
 import com.top1.marketinfo.entity.User;
 import org.json.JSONObject;
 
@@ -20,5 +22,5 @@ public interface WeiXinService {
 
     //审核完成后，通知发布者
     //type:0 热点,1 需求
-    public void sendVerifyMessage(long id,int type,boolean pass);
+    public void sendVerifyMessage(User user, News news, Demand demand);
 }

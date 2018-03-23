@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 /*
+* 用户调用拦截（审核通知）
 * Author GQ
 * Date:2018/1/10
 * Time:上午10:36

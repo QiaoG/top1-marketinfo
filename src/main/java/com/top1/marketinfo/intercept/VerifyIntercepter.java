@@ -25,8 +25,11 @@ public class VerifyIntercepter {
 
     public Object handle(MethodInvocation invocation) throws Throwable{
         log.info(invocation.getMethod().getName()+" will be called!");
-        Object obj=invocation.proceed();
-        notifyService.handle(null);
+
+        Object obj = invocation.proceed();
+        if("save".equals(invocation.getMethod().getName())) {
+            notifyService.handle(obj);
+        }
         return obj;
     }
 }

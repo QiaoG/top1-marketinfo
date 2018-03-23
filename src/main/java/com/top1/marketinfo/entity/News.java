@@ -19,10 +19,10 @@ public class News {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(columnDefinition="varchar(20480)",nullable = false)
     private String content = "";
 
-    private int authorId;
+    private long authorId;
 
     @Column(columnDefinition="VARCHAR(50) BINARY")
     private String authorNickName;
@@ -44,6 +44,11 @@ public class News {
     //证劵代码6位
     @Column(columnDefinition="VARCHAR(6) ")
     private String code;
+
+    private String formId;//提交的表单id
+
+    @Transient
+    private String action;//拦截是识别操作，目前用于审核
 
     @Transient
     private int discussCount;

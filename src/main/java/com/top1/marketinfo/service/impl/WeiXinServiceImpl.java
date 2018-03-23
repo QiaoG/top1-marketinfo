@@ -1,5 +1,7 @@
 package com.top1.marketinfo.service.impl;
 
+import com.top1.marketinfo.entity.Demand;
+import com.top1.marketinfo.entity.News;
 import com.top1.marketinfo.entity.Role;
 import com.top1.marketinfo.entity.User;
 import com.top1.marketinfo.exception.WXException;
@@ -7,6 +9,7 @@ import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.UserService;
 import com.top1.marketinfo.service.WeiXinService;
 import com.top1.marketinfo.utils.SSLClient;
+import com.top1.marketinfo.vo.AccessToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
@@ -45,6 +48,10 @@ public class WeiXinServiceImpl implements WeiXinService {
     @Autowired
     private UserService service;
 
+    private AccessToken token;
+
+    private final String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+WEIXIN_APP_ID+"&secret="+WEIXIN_APP_SECRET;
+
     @Override
     public JSONObject getSessionInCach(String key) {
         JSONObject json = cach.get(key);
@@ -56,9 +63,7 @@ public class WeiXinServiceImpl implements WeiXinService {
     public String getSessionKey(String jscode) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid="+WEIXIN_APP_ID+
                 "&secret="+WEIXIN_APP_SECRET+"&js_code="+jscode+"&grant_type=authorization_code";
-        log.info(url);
         String v = doHttpsGet(url,"utf-8");
-        log.info("[wx] https get session: "+v);
         String r = "-1";
         JSONObject jObject = null;
         try {
@@ -122,7 +127,24 @@ public class WeiXinServiceImpl implements WeiXinService {
     }
 
     @Override
-    public void sendVerifyMessage(long id,int type,boolean pass) {
+    public void sendVerifyMessage(User user, News news, Demand demand) {
+
+    }
+
+    private String getAccessToke(){
+        if(this.token == null || ((System.currentTimeMillis()-token.getTime().getTime())/1000+20) > token.getExpires_in()){
+            String v = doHttpsGet(tokenUrl,"utf-8");
+            JSONObject json = new JSONObject(v);
+            if(!json.has("access_token")){
+                throw new WXException("2001","获取微信access_token失败！");
+            }
+            token = new AccessToken();
+            token.setAccess_token(json.getString("access_token"));
+            token.setExpires_in(json.getInt("expires_in"));
+            token.setTime(new Date());
+        }
+        return token.getAccess_token();
+
 
     }
 
