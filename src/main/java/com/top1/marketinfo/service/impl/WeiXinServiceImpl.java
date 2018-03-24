@@ -147,13 +147,18 @@ public class WeiXinServiceImpl implements WeiXinService {
         JSONObject json = new JSONObject();
         json.put("touser",user.getWxCode());
         json.put("template_id",WEIXIN_TEMPLATE_ID);
-        json.put("page",news == null ? "pages/demand/detail?id="+demand.getId() : "pages/news/detail?id="+news.getId());
+        if(pass) {
+            json.put("page", news == null ? "demand/detail?id=" + demand.getId() : "news/detail?id=" + news.getId());
+        }
         json.put("form_id",news == null ? demand.getFormId() : news.getFormId());
 
         JSONObject data = new JSONObject();
         data.put("keyword1",new JSONObject("{\"value\":\""+(news==null?demand.getTitle():news.getTitle())+"\",\"color\": \"#173177\"}"));
-        data.put("keyword2",new JSONObject("{\"value\":\""+(news==null?"需求审核":"热点审核")+"\",\"color\": \"#173177\"}"));
-        data.put("keyword3",new JSONObject("{\"value\":\""+(pass?"审核通过":"审核不通过")+"\",\"color\": \"#173177\"}"));
+        data.put("keyword2",new JSONObject("{\"value\":\""+(pass?"通过":"不通过")+"\",\"color\": \"#173177\"}"));
+        data.put("keyword3",new JSONObject("{\"value\":\""+(news==null?demand.getPublishDate():news.getCreateDate())+"\",\"color\": \"#173177\"}"));
+        data.put("keyword4",new JSONObject("{\"value\":\""+(news==null?demand.getVerifyDate():news.getVerifyDate())+"\",\"color\": \"#173177\"}"));
+        data.put("keyword5",new JSONObject("{\"value\":\""+(news==null?"需求审核":"热点审核")+"\",\"color\": \"#173177\"}"));
+
         data.put("keyword4",new JSONObject("{\"value\":\"\",\"color\": \"#173177\"}"));
         json.put("data",data);
 

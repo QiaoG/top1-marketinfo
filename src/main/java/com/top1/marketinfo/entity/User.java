@@ -41,6 +41,9 @@ public class User {
 
     private String avatarUrl;//头像地址
 
+    @Column(columnDefinition="varchar(50)")
+    private String job;//职位
+
     @Transient
     private String token;
 

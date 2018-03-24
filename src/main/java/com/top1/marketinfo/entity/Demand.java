@@ -31,6 +31,10 @@ public class Demand {
 
     @Temporal(TemporalType.TIMESTAMP)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date verifyDate ;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date invalidDate = new Date();
 
     private int publisherId;
