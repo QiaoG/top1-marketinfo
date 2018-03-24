@@ -5,7 +5,6 @@ import com.top1.marketinfo.entity.News;
 import com.top1.marketinfo.entity.Role;
 import com.top1.marketinfo.entity.User;
 import com.top1.marketinfo.exception.WXException;
-import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.UserService;
 import com.top1.marketinfo.service.WeiXinService;
 import com.top1.marketinfo.utils.SSLClient;
@@ -13,8 +12,19 @@ import com.top1.marketinfo.vo.AccessToken;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.TrustStrategy;
 import org.apache.http.util.EntityUtils;
 import org.apache.http.HttpEntity;
 import org.json.JSONException;
@@ -25,11 +35,15 @@ import org.springframework.stereotype.Service;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.SSLContext;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.security.KeyManagementException;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.X509Certificate;
 import java.security.spec.AlgorithmParameterSpec;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /*
 * Author GQ
@@ -52,6 +66,8 @@ public class WeiXinServiceImpl implements WeiXinService {
 
     private final String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+WEIXIN_APP_ID+"&secret="+WEIXIN_APP_SECRET;
 
+    private final String messageUrl = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
+
     @Override
     public JSONObject getSessionInCach(String key) {
         JSONObject json = cach.get(key);
@@ -63,7 +79,7 @@ public class WeiXinServiceImpl implements WeiXinService {
     public String getSessionKey(String jscode) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid="+WEIXIN_APP_ID+
                 "&secret="+WEIXIN_APP_SECRET+"&js_code="+jscode+"&grant_type=authorization_code";
-        String v = doHttpsGet(url,"utf-8");
+        String v = doHttpsGet2(url,"utf-8");
         String r = "-1";
         JSONObject jObject = null;
         try {
@@ -127,13 +143,27 @@ public class WeiXinServiceImpl implements WeiXinService {
     }
 
     @Override
-    public void sendVerifyMessage(User user, News news, Demand demand) {
+    public void sendVerifyMessage(User user, News news, Demand demand,boolean pass) {
+        JSONObject json = new JSONObject();
+        json.put("touser",user.getWxCode());
+        json.put("template_id",WEIXIN_TEMPLATE_ID);
+        json.put("page",news == null ? "pages/demand/detail?id="+demand.getId() : "pages/news/detail?id="+news.getId());
+        json.put("form_id",news == null ? demand.getFormId() : news.getFormId());
 
+        JSONObject data = new JSONObject();
+        data.put("keyword1",new JSONObject("{\"value\":\""+(news==null?demand.getTitle():news.getTitle())+"\",\"color\": \"#173177\"}"));
+        data.put("keyword2",new JSONObject("{\"value\":\""+(news==null?"需求审核":"热点审核")+"\",\"color\": \"#173177\"}"));
+        data.put("keyword3",new JSONObject("{\"value\":\""+(pass?"审核通过":"审核不通过")+"\",\"color\": \"#173177\"}"));
+        data.put("keyword4",new JSONObject("{\"value\":\"\",\"color\": \"#173177\"}"));
+        json.put("data",data);
+
+        String result = this.doHttpsPost(messageUrl,json,"utf-8");
+        log.info(String.format("verify %s(%b), wechar notify author,response: %s",(news!=null?"news:"+news.getTitle():"demand:"+demand.getTitle()),pass,result));
     }
 
     private String getAccessToke(){
         if(this.token == null || ((System.currentTimeMillis()-token.getTime().getTime())/1000+20) > token.getExpires_in()){
-            String v = doHttpsGet(tokenUrl,"utf-8");
+            String v = doHttpsGet2(tokenUrl,"utf-8");
             JSONObject json = new JSONObject(v);
             if(!json.has("access_token")){
                 throw new WXException("2001","获取微信access_token失败！");
@@ -167,6 +197,96 @@ public class WeiXinServiceImpl implements WeiXinService {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    private String doHttpsGet2(String url,String charset){
+        CloseableHttpClient httpClient = createSSLClientDefault();
+
+        CloseableHttpResponse response = null;
+        HttpGet get = new HttpGet(url);
+        String result = "";
+
+        try {
+            response = httpClient.execute(get);
+
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity entity = response.getEntity();
+                if (null != entity) {
+                    result = EntityUtils.toString(entity, charset);
+                }
+            }
+        } catch (IOException ex) {
+            log.error("ling 204",ex);
+        } finally {
+            if (null != response) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException ex) {
+                    log.error("line 210",ex);
+                }
+            }
+        }
+        return result;
+    }
+
+    private String doHttpsPost(String url,JSONObject json,String charset){
+        CloseableHttpClient httpClient = createSSLClientDefault();
+        HttpPost post = new HttpPost(url);
+
+        CloseableHttpResponse response = null;
+
+        post.addHeader("Content-Type", "application/json");
+        post.setEntity(new StringEntity(json.toString(),Charset.forName(charset)));
+
+        String result = "";
+
+        try {
+            response = httpClient.execute(post);
+
+            if (response.getStatusLine().getStatusCode() == 200) {
+                HttpEntity entity = response.getEntity();
+                if (null != entity) {
+                    result = EntityUtils.toString(entity, charset);
+                }
+            }
+        } catch (IOException ex) {
+            log.error("",ex);
+        } finally {
+            if (null != response) {
+                try {
+                    EntityUtils.consume(response.getEntity());
+                } catch (IOException ex) {
+                    log.error("",ex);
+                }
+            }
+        }
+        return result;
+    }
+
+    private static CloseableHttpClient createSSLClientDefault() {
+
+        SSLContext sslContext;
+        try {
+            sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                //信任所有
+                @Override
+                public boolean isTrusted(X509Certificate[] xcs, String string){
+                    return true;
+                }
+            }).build();
+
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
+
+            return HttpClients.custom().setSSLSocketFactory(sslsf).build();
+        } catch (KeyStoreException ex) {
+            log.error(ex.getMessage());
+        } catch (NoSuchAlgorithmException ex) {
+            log.error("",ex);
+        } catch (KeyManagementException ex) {
+            log.error("",ex);
+        }
+
+        return HttpClients.createDefault();
     }
 
     public static void main(String[] args) {

@@ -3,6 +3,8 @@ package com.top1.marketinfo.service.impl;
 import com.top1.marketinfo.entity.Demand;
 import com.top1.marketinfo.entity.News;
 import com.top1.marketinfo.entity.User;
+import com.top1.marketinfo.repository.DemandRepository;
+import com.top1.marketinfo.repository.NewsRepository;
 import com.top1.marketinfo.repository.UserRepository;
 import com.top1.marketinfo.service.NotifyForVerifyServcie;
 import com.top1.marketinfo.service.UserService;
@@ -31,29 +33,46 @@ public class NotifyForVerifyServiceImpl implements NotifyForVerifyServcie {
     @Autowired
     private WeiXinService wxService;
 
+    @Autowired
+    private NewsRepository newsRepository;
+
+    @Autowired
+    private DemandRepository demandRepository;
+
     @Override
     public Object handle(Object para) {
-        log.info("will handle verify notify ... "+para.getClass().getName());
+        log.info("[INTERCEPT] will handle verify notify ... "+para.getClass().getName());
         User user = null;
+        boolean pass = false;
         if(para instanceof News){
             News news = (News)para;
-            if("verify".equals(news.getAction())){//审核通过
+            log.info("[INTERCEPT] news verify result: "+news.getAction());
+            if("verify".equals(news.getAction()) || "verify_no".equals(news.getAction())){//审核通过/不通过
+                if("verify_no".equals(news.getAction())){
+                    newsRepository.delete(news.getId());
+                }
+                pass = "verify".equals(news.getAction()) ? true :false;
                 user = userRepository.findOne(news.getAuthorId());
                 if(user != null && news.getFormId() != null){
-                    wxService.sendVerifyMessage(user,news,null);
+                    wxService.sendVerifyMessage(user,news,null,pass);
                 }else{
-                    log.error("verify news complement,not find user by news.author_id for weixin notify");
+                    log.error("[INTERCEPT] verify news complement,not find user by news.author_id for weixin notify");
                 }
             }
         }
         if(para instanceof Demand){
             Demand demand = (Demand)para;
-            if("verify".equals(demand.getAction())){//审核通过
+            log.info("[INTERCEPT] demand verify result: "+demand.getAction());
+            if("verify".equals(demand.getAction()) || "verify_no".equals(demand.getAction())){//审核通过/不通过
+                if("verify_no".equals(demand.getAction())){
+                    demandRepository.delete(demand.getId());
+                }
+                pass = "verify".equals(demand.getAction()) ? true :false;
                 user = userRepository.findOne(demand.getVerifyId());
                 if(user != null && demand.getFormId() != null){
-                    wxService.sendVerifyMessage(user,null,demand);
+                    wxService.sendVerifyMessage(user,null,demand,pass);
                 }else{
-                    log.error("verify demand complement, not find user by demand.author_id for weixin notify");
+                    log.error("[INTERCEPT] verify demand complement, not find user by demand.author_id for weixin notify");
                 }
             }
         }
