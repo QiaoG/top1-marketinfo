@@ -43,6 +43,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.X509Certificate;
 import java.security.spec.AlgorithmParameterSpec;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /*
@@ -67,6 +68,8 @@ public class WeiXinServiceImpl implements WeiXinService {
     private final String tokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+WEIXIN_APP_ID+"&secret="+WEIXIN_APP_SECRET;
 
     private final String messageUrl = "https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send?access_token=";
+
+    private SimpleDateFormat df=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public JSONObject getSessionInCach(String key) {
@@ -148,15 +151,15 @@ public class WeiXinServiceImpl implements WeiXinService {
         json.put("touser",user.getWxCode());
         json.put("template_id",WEIXIN_TEMPLATE_ID);
         if(pass) {
-            json.put("page", news == null ? "demand/detail?id=" + demand.getId() : "news/detail?id=" + news.getId());
+            json.put("page", news == null ? "demand?id=" + demand.getId() : "news?id=" + news.getId());
         }
         json.put("form_id",news == null ? demand.getFormId() : news.getFormId());
 
         JSONObject data = new JSONObject();
         data.put("keyword1",new JSONObject("{\"value\":\""+(news==null?demand.getTitle():news.getTitle())+"\",\"color\": \"#173177\"}"));
         data.put("keyword2",new JSONObject("{\"value\":\""+(pass?"通过":"不通过")+"\",\"color\": \"#173177\"}"));
-        data.put("keyword3",new JSONObject("{\"value\":\""+(news==null?demand.getPublishDate():news.getCreateDate())+"\",\"color\": \"#173177\"}"));
-        data.put("keyword4",new JSONObject("{\"value\":\""+(news==null?demand.getVerifyDate():news.getVerifyDate())+"\",\"color\": \"#173177\"}"));
+        data.put("keyword3",new JSONObject("{\"value\":\""+df.format(news==null?demand.getPublishDate():news.getCreateDate())+"\",\"color\": \"#173177\"}"));
+        data.put("keyword4",new JSONObject("{\"value\":\""+df.format(news==null?demand.getVerifyDate():news.getVerifyDate())+"\",\"color\": \"#173177\"}"));
         data.put("keyword5",new JSONObject("{\"value\":\""+(news==null?"需求审核":"热点审核")+"\",\"color\": \"#173177\"}"));
 
         data.put("keyword4",new JSONObject("{\"value\":\"\",\"color\": \"#173177\"}"));
