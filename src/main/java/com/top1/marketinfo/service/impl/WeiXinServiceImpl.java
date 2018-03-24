@@ -157,7 +157,7 @@ public class WeiXinServiceImpl implements WeiXinService {
         data.put("keyword4",new JSONObject("{\"value\":\"\",\"color\": \"#173177\"}"));
         json.put("data",data);
 
-        String result = this.doHttpsPost(messageUrl,json,"utf-8");
+        String result = this.doHttpsPost(messageUrl+this.getAccessToke(),json,"utf-8");
         log.info(String.format("verify %s(%b), wechar notify author,response: %s",(news!=null?"news:"+news.getTitle():"demand:"+demand.getTitle()),pass,result));
     }
 
@@ -172,6 +172,7 @@ public class WeiXinServiceImpl implements WeiXinService {
             token.setAccess_token(json.getString("access_token"));
             token.setExpires_in(json.getInt("expires_in"));
             token.setTime(new Date());
+            log.info("get access_token: "+token);
         }
         return token.getAccess_token();
 
