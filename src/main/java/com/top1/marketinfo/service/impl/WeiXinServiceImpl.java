@@ -159,7 +159,7 @@ public class WeiXinServiceImpl implements WeiXinService {
         data.put("keyword1",new JSONObject("{\"value\":\""+(news==null?demand.getTitle():news.getTitle())+"\",\"color\": \"#173177\"}"));
         data.put("keyword2",new JSONObject("{\"value\":\""+(pass?"通过":"不通过")+"\",\"color\": \"#173177\"}"));
         data.put("keyword3",new JSONObject("{\"value\":\""+df.format(news==null?demand.getPublishDate():news.getCreateDate())+"\",\"color\": \"#173177\"}"));
-        data.put("keyword4",new JSONObject("{\"value\":\""+df.format(news==null?demand.getVerifyDate():news.getVerifyDate())+"\",\"color\": \"#173177\"}"));
+        data.put("keyword4",new JSONObject("{\"value\":\""+df.format(new Date())+"\",\"color\": \"#173177\"}"));
         data.put("keyword5",new JSONObject("{\"value\":\""+(news==null?"需求审核":"热点审核")+"\",\"color\": \"#173177\"}"));
 
         data.put("keyword4",new JSONObject("{\"value\":\"\",\"color\": \"#173177\"}"));

@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /*
@@ -40,13 +41,14 @@ public class NotifyForVerifyServiceImpl implements NotifyForVerifyServcie {
     private DemandRepository demandRepository;
 
     @Override
+    @Async
     public Object handle(Object para) {
         log.info("[INTERCEPT] will handle verify notify ... "+para.getClass().getName());
         User user = null;
         boolean pass = false;
         if(para instanceof News){
             News news = (News)para;
-            log.info("[INTERCEPT] news verify result: "+news.getAction());
+            log.info("[INTERCEPT] news verify result: "+(news.getAction()==null?"null":news.getAction()));
             if("verify".equals(news.getAction()) || "verify_no".equals(news.getAction())){//审核通过/不通过
                 if("verify_no".equals(news.getAction())){
                     newsRepository.delete(news.getId());
@@ -62,13 +64,13 @@ public class NotifyForVerifyServiceImpl implements NotifyForVerifyServcie {
         }
         if(para instanceof Demand){
             Demand demand = (Demand)para;
-            log.info("[INTERCEPT] demand verify result: "+demand.getAction());
+            log.info("[INTERCEPT] demand verify result: "+demand.getAction()==null?"null":demand.getAction());
             if("verify".equals(demand.getAction()) || "verify_no".equals(demand.getAction())){//审核通过/不通过
                 if("verify_no".equals(demand.getAction())){
                     demandRepository.delete(demand.getId());
                 }
                 pass = "verify".equals(demand.getAction()) ? true :false;
-                user = userRepository.findOne(demand.getVerifyId());
+                user = userRepository.findOne(demand.getPublisherId());
                 if(user != null && demand.getFormId() != null){
                     wxService.sendVerifyMessage(user,null,demand,pass);
                 }else{
