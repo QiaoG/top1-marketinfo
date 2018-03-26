@@ -19,6 +19,9 @@ public class Opinion {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    private User user;
+
     @Column(columnDefinition="varchar(50)")
     private String contact;
 
