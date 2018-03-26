@@ -44,6 +44,9 @@ public class User {
     @Column(columnDefinition="varchar(50)")
     private String job = "";//职位
 
+    @Column(columnDefinition="varchar(50)")
+    private String email = "";
+
     @Transient
     private String token;
 

@@ -34,14 +34,14 @@ public class JwtFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) req;
 
         final String method = request.getMethod();
-        log.info("##### request method: "+method+" "+secretkey);
+        log.info("##### request method: "+method+" "+request.getServletPath());
 
-        if("POST".equals(method)|| "PUT".equals(method) || "DELETE".equals(method)){
+        if(request.getServletPath().startsWith("/api/user/") || "POST".equals(method)|| "PUT".equals(method) || "DELETE".equals(method)){
             //客户端将token封装在请求头中，格式为（Bearer后加空格）：Authorization：Bearer +token
             final String authHeader = request.getHeader("Authorization");
             log.info("auth header: "+authHeader);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new ServletException("Missing or invalid Authorization header.");
+                throw new ServletException("此接口需要认证，请求头中缺少或者认证信息无效。");
             }
 
             //去除Bearer 后部分
@@ -55,7 +55,7 @@ public class JwtFilter extends GenericFilterBean {
                 request.setAttribute("claims", claims);
             }
             catch (final Exception e) {
-                throw new ServletException("Invalid token."+e.getMessage());
+                throw new ServletException("无效的token."+e.getMessage());
             }
         }
 //        if(true)
