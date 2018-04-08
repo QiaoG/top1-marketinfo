@@ -52,7 +52,7 @@ public class WeChatController {
         User user = userService.getByWxOpenid(json.getString("openid"));
         if(user.getRole().getId() < Role.GENERAL.getId()){//管理员
             VerifyCountVO vo = statistisService.aboutVerifyCount();
-            user.setVerifyCount(vo.getDemandCount()+vo.getDiscussCount()+vo.getNewsCount());
+            user.setVerifyCount(vo.getDemandCount()+vo.getDiscussCount()+vo.getNewsCount()+vo.getOpinionCount());
         }
         log.info("get user by openid, is " + (user == null ? "" : "not ") + " null");
         if (user != null) {
