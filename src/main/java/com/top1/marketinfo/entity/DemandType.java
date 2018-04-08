@@ -8,7 +8,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 * Time:下午8:06
 */
 public enum DemandType {
-    STOCK_TRANSFER(0, "老股转让"), INVITE_SURVEY(1, "约调研"), INVITE_INVESTMENT(2, "约投资"), STOCK_MORTGAGE(3, "股权抵押"), OTHER(4, "其他");
+    STOCK_TRANSFER(0, "选择需求"), INVITE_SURVEY(1, "约调研"), INVITE_INVESTMENT(2, "约投资"), STOCK_MORTGAGE(3, "股权抵押"),
+    MERGER(4,"并购"),B_SHELL(5,"借壳"),ADVICE(6,"咨询服务"),OTHER(7, "其他");
 
     private int id;
     private String name;
