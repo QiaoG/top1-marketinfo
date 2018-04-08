@@ -20,7 +20,7 @@ public class StatistisServiceImpl extends AbstractJdbcService implements Statist
 
     private final String sqlCount = "select (select count(id) from news where status=0) nc," +
             "(select count(id) from demand where status=0) dc," +
-            "(select count(id) from discuss where status = 0) sc;";
+            "(select count(id) from discuss where status = 0) sc, (select count(id) from opinion) oc;";
     private final String sqlTotal = "select (select count(id) from news where status=0)+" +
             "(select count(id) from demand where status=0) + " +
             "(select count(id) from discuss where status = 0) as total;";
@@ -38,6 +38,7 @@ public class StatistisServiceImpl extends AbstractJdbcService implements Statist
             s.setNewsCount(rs.getInt(1));
             s.setDemandCount(rs.getInt(2));
             s.setDiscussCount(rs.getInt(3));
+            s.setOpinionCount(rs.getInt(4));
             list.add(s);
         });
         if(list.size() > 0){

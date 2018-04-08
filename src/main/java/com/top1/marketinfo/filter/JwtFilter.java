@@ -42,7 +42,7 @@ public class JwtFilter extends GenericFilterBean {
             final String authHeader = request.getHeader("Authorization");
             log.info("auth header: "+authHeader);
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new ServletException("此接口需要认证，请求头中缺少或者认证信息无效。");
+                throw new ServletException("The interface needs authentication, and the request header is missing or the authentication information is invalid.");//"此接口需要认证，请求头中缺少或者认证信息无效。");
             }
 
             //去除Bearer 后部分
@@ -56,7 +56,7 @@ public class JwtFilter extends GenericFilterBean {
                 request.setAttribute("claims", claims);
             }
             catch (final Exception e) {
-                throw new ServletException("无效的token."+e.getMessage());
+                throw new ServletException("invalid token."+e.getMessage());
             }
         }
 //        if(true)

@@ -15,4 +15,6 @@ public class VerifyCountVO {
     private int demandCount;
 
     private int discussCount;
+
+    private int opinionCount;
 }
