@@ -37,7 +37,7 @@ public class JwtFilter extends GenericFilterBean {
         log.info("##### request method: "+method+" "+request.getServletPath());
         String url =  request.getServletPath();
 
-        if(url.startsWith("/api/user/") || url.startsWith("/users/")|| "POST".equals(method)|| "PUT".equals(method) || "DELETE".equals(method)){
+        if(url.startsWith("/api/user") || url.startsWith("/users/")|| "POST".equals(method)|| "PUT".equals(method) || "DELETE".equals(method)){
             //客户端将token封装在请求头中，格式为（Bearer后加空格）：Authorization：Bearer +token
             final String authHeader = request.getHeader("Authorization");
             log.info("auth header: "+authHeader);
