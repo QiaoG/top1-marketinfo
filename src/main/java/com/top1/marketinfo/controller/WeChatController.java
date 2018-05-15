@@ -50,12 +50,13 @@ public class WeChatController {
         String key = wxService.getSessionKey(code);
         JSONObject json = wxService.getSessionInCach(key);
         User user = userService.getByWxOpenid(json.getString("openid"));
-        if(user.getRole().getId() < Role.GENERAL.getId()){//管理员
-            VerifyCountVO vo = statistisService.aboutVerifyCount();
-            user.setVerifyCount(vo.getDemandCount()+vo.getDiscussCount()+vo.getNewsCount()+vo.getOpinionCount());
-        }
+
         log.info("get user by openid, is " + (user == null ? "" : "not ") + " null");
         if (user != null) {
+            if(user.getRole().getId() < Role.GENERAL.getId()){//管理员
+                VerifyCountVO vo = statistisService.aboutVerifyCount();
+                user.setVerifyCount(vo.getDemandCount()+vo.getDiscussCount()+vo.getNewsCount()+vo.getOpinionCount());
+            }
             String token = Jwts.builder().setSubject("Authorization")
                     .claim("nickname", user.getNickname()).setIssuedAt(new Date())
                     .signWith(SignatureAlgorithm.HS256, secretkey).compact();

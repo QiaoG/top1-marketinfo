@@ -9,7 +9,8 @@ import com.fasterxml.jackson.annotation.JsonValue;
 */
 public enum EnterpriseCategory{
 
-    LISTED_COMPANIES(0, "挂牌企业"), INVESTMENT_INSTITUTION(1, "投资机构"), FINANCIAL_ADVISOR(2, "财务顾问"), SECURITIES_COMPANY(3, "证劵公司"), ANALYST(4, "分析师"), OTHER(5, "其他机构");
+    LISTED_COMPANIES(0, "挂牌企业"), INVESTMENT_INSTITUTION(1, "投资机构"), FINANCIAL_ADVISOR(2, "财务顾问"),
+    SECURITIES_COMPANY(3, "证劵公司"), ANALYST(4, "分析师"), LISTED_COMPANY(5, "上市公司"),OTHER(10, "其他机构");
 
     private int id;
 
